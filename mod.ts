@@ -9,18 +9,17 @@ export interface DBWithHash {
   hash: string | null | undefined;
   query: (
     query: string,
-    values?: QueryParameterSet,
+    values?: QueryParameterSet
   ) => Promise<RowObject[] | undefined>;
 }
-
-let db0: DB;
-const strPrefix = (v) => `[s3lite] ${v}`;
 
 export default async (
   get_: () => Promise<ArrayBuffer | void>,
   set: (buffer: Uint8Array) => boolean | Promise<boolean>,
-  gethash?: () => Promise<string | null | undefined>,
+  gethash?: () => Promise<string | null | undefined>
 ): Promise<DBWithHash> => {
+  let db0: DB;
+  const strPrefix = (v) => `[s3lite] ${v}`;
   const get = async () => {
     const buffer = await get_().catch(() => null);
     if (db0) {
