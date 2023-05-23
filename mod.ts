@@ -21,14 +21,16 @@ export default async (
   let db0: DB;
   const strPrefix = (v) => `[s3lite] ${v}`;
   const get = async () => {
-    const buffer = await get_().catch(() => null);
     if (db0) {
-      console.log(strPrefix("close"));
+      console.time(strPrefix("close"));
       db0.close();
+      console.timeEnd(strPrefix("close"));
     }
+    console.time(strPrefix("open")); 
+    const buffer = await get_().catch(() => null); 
     db0 = new DB("", { memory: true });
-    console.log(strPrefix("open"));
     if (buffer) db0.deserialize(new Uint8Array(buffer));
+    console.timeEnd(strPrefix("open"));    
     return db0;
   };
 
